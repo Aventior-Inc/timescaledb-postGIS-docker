@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pg: [14, 15, 16, 17]
+        pg: [17]
         oss: [ "", "-oss" ]
     steps:
       - uses: actions/checkout@v4
@@ -46,15 +46,15 @@ jobs:
       - name: Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
 
-      - name: Login to DockerHub Registry
-        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
+      # - name: Login to DockerHub Registry
+      #   run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
 
-      - name: Build and push multi-platform Docker image for TimescaleDB
-        run: |
-          if [ "${{ github.event.inputs.no_tag_latest }}" == "true" ]
-          then
-              export BETA=1
-          fi
-          make multi${{ matrix.oss }} ORG=$ORG PG_VER=pg${{ matrix.pg }} \
-              TS_VERSION=$TS_VERSION PREV_EXTRA="${{ matrix.oss }}" BETA=$BETA
+      # - name: Build and push multi-platform Docker image for TimescaleDB
+      #   run: |
+      #     if [ "${{ github.event.inputs.no_tag_latest }}" == "true" ]
+      #     then
+      #         export BETA=1
+      #     fi
+      #     make multi${{ matrix.oss }} ORG=$ORG PG_VER=pg${{ matrix.pg }} \
+      #         TS_VERSION=$TS_VERSION PREV_EXTRA="${{ matrix.oss }}" BETA=$BETA
 

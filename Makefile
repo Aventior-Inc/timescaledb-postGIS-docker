@@ -2,7 +2,7 @@ NAME=timescaledb
 # Default is to timescaledev to avoid unexpected push to the main repo
 # Set ORG to timescale in the caller
 ORG=timescaledev
-PG_VER=pg16
+PG_VER=pg17
 PG_VER_NUMBER=$(shell echo $(PG_VER) | cut -c3-)
 PG_MAJOR_VERSION=$(shell echo $(PG_VER_NUMBER) | cut -d. -f1)
 TS_VERSION=main
