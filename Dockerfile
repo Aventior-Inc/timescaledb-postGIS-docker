@@ -182,6 +182,17 @@ RUN set -eux \
     && projsync --system-directory --file us_noaa_eshpgn \
     && projsync --system-directory --file us_noaa_prvi \
     && projsync --system-directory --file us_noaa_wmhpgn \
+
+# Install pgrouting
+    && wget -O pgrouting-3.7.1.tar.gz    https://github.com/pgRouting/pgrouting/archive/v3.7.1.tar.gz
+    && tar -xzf pgrouting-3.7.1.tar.gz
+    && cd pgrouting-3.7.1
+    && mkdir build
+    && cd build
+    && cmake ..
+    && make
+    && make install
+
 # This section performs a regression check.
     && mkdir /tempdb \
     && chown -R postgres:postgres /tempdb \
@@ -198,6 +209,7 @@ RUN set -eux \
     && su postgres -c 'psql    -c "CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us;"' \
     && su postgres -c 'psql    -c "CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;"' \
     && su postgres -c 'psql    -c "CREATE EXTENSION IF NOT EXISTS postgis_topology;"' \
+    && su postgres -c 'psql    -c "CREATE EXTENSION IF NOT EXISTS pgrouting;"' \
     && su postgres -c 'psql -t -c "SELECT version();"'              >> /_pgis_full_version.txt \
     && su postgres -c 'psql -t -c "SELECT PostGIS_Full_Version();"' >> /_pgis_full_version.txt \
     && su postgres -c 'psql -t -c "\dx"' >> /_pgis_full_version.txt \
